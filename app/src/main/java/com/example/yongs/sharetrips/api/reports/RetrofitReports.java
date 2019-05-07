@@ -113,4 +113,22 @@ public class RetrofitReports {
             }
         });
     }
+
+    public void getSearch(String keyword, String location, final ApiCallback callback){
+        mReportApiService.getSearch(keyword,location).enqueue(new Callback<List<Report>>() {
+            @Override
+            public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
+                if(response.isSuccessful()){
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    callback.onFailure(response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Report>> call, Throwable t) {
+
+            }
+        });
+    }
 }

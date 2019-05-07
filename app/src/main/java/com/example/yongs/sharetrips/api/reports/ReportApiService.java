@@ -16,6 +16,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ReportApiService {
 
@@ -32,4 +33,7 @@ public interface ReportApiService {
             @PartMap() Map<String,Object> report,
             @Part MultipartBody.Part file
     );
+
+    @GET("/reports/search")
+    Call<List<Report>> getSearch(@Query("keyword") String keyword, @Query("location") String location);
 }
