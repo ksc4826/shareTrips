@@ -18,7 +18,8 @@ public class StartActivity extends AppCompatActivity {
         Handler handler = new Handler() {
             public void handleMessage(Message msg){
                 super.handleMessage(msg);
-                startActivity(new Intent(StartActivity.this,LoginActivity.class));
+                //startActivity(new Intent(StartActivity.this,LoginActivity.class));
+                startActivity(new Intent(StartActivity.this,MainActivity.class));
                 finish();
             }
         };

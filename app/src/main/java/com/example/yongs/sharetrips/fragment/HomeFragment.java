@@ -1,13 +1,13 @@
 package com.example.yongs.sharetrips.fragment;
 
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.yongs.sharetrips.R;
-import com.example.yongs.sharetrips.activity.SearchActivity;
 import com.example.yongs.sharetrips.adapter.ReportAdapter;
 import com.example.yongs.sharetrips.api.ApiCallback;
 import com.example.yongs.sharetrips.api.reports.ReportApiService;
@@ -121,14 +120,32 @@ public class HomeFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_search,menu);
+        SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+        searchView.setQueryHint("검색어를 입력하세요.");
+        searchView.setIconifiedByDefault(true);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.menu_search:
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivity(intent);
+
+
                 return true;
         }
 
