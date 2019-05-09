@@ -151,8 +151,8 @@ public class RetrofitReports {
         });
     }
 
-    public void getSearch(String keyword, String location, final ApiCallback callback){
-        mReportApiService.getSearch(keyword,location).enqueue(new Callback<List<Report>>() {
+    public void getSearch(String keyword, final ApiCallback callback){
+        mReportApiService.getSearch(keyword).enqueue(new Callback<List<Report>>() {
             @Override
             public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
                 if(response.isSuccessful()){

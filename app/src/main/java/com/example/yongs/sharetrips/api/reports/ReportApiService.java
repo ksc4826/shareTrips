@@ -41,5 +41,5 @@ public interface ReportApiService {
     );
 
     @GET("/reports/search")
-    Call<List<Report>> getSearch(@Query("keyword") String keyword, @Query("location") String location);
+    Call<List<Report>> getSearch(@Query("keyword") String keyword);
 }
