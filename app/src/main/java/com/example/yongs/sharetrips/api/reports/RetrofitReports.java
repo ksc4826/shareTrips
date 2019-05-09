@@ -95,9 +95,46 @@ public class RetrofitReports {
         });
     }
 
+    public void getReports(final ApiCallback callback){
+        mReportApiService.getReports().enqueue(new Callback<List<Report>>(){
+
+            @Override
+            public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
+                if(response.isSuccessful()){
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    callback.onFailure(response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Report>> call, Throwable t) {
+                callback.onError(t);
+            }
+        });
+    }
+
 
     public void getImage(String username, int reportID, final ApiCallback callback){
         mReportApiService.getImage(username,reportID).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    callback.onFailure(response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public void getImage(int reportID, final ApiCallback callback){
+        mReportApiService.getImage(reportID).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if(response.isSuccessful()){

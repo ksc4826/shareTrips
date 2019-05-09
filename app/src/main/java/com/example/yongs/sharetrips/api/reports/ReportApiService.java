@@ -23,9 +23,15 @@ public interface ReportApiService {
     @GET("/reports/{username}")
     Call<List<Report>> getReport(@Path("username") String username);
 
+    @GET("/reports/all")
+    Call<List<Report>> getReports();
 
     @GET("/reports/images/{username}/{reportID}")
     Call<ResponseBody> getImage(@Path("username") String username, @Path("reportID") int reportID);
+
+    @GET("/reports/images/{reportID}")
+    Call<ResponseBody> getImage(@Path("reportID") int reportID);
+
 
     @Multipart
     @POST("/reports")
