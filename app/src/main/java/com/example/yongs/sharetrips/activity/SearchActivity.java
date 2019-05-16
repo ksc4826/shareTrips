@@ -56,7 +56,7 @@ public class SearchActivity extends AppCompatActivity {
     void search(){
         getValue();
 
-        mRetrofitReports.getSearch(mKeyword, mLocation, new ApiCallback() {
+        /*mRetrofitReports.getSearch(mKeyword, mLocation, new ApiCallback() {
             @Override
             public void onError(Throwable t) {
 
@@ -68,9 +68,9 @@ public class SearchActivity extends AppCompatActivity {
 
                 mReportList = (List<Report>) receiveData;
 
-                /*Intent intent = new Intent(this, searchResult.class);
+                Intent intent = new Intent(this, searchResult.class);
                 intent.putExtra("reportList",mReportList);
-                startActivity(intent);*/
+                startActivity(intent);
 
             }
 
@@ -78,7 +78,7 @@ public class SearchActivity extends AppCompatActivity {
             public void onFailure(int code) {
 
             }
-        });
+        });*/
     }
 
     private void setEdit(){

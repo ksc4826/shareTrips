@@ -2,6 +2,8 @@ package com.example.yongs.sharetrips.api.reports;
 
 import com.example.yongs.sharetrips.model.Report;
 
+import org.json.JSONObject;
+
 import java.nio.Buffer;
 import java.util.List;
 import java.util.Map;
@@ -42,4 +44,7 @@ public interface ReportApiService {
 
     @GET("/reports/search")
     Call<List<Report>> getSearch(@Query("keyword") String keyword);
+
+    @GET("/reports/recommend")
+    Call<JSONObject> getRecommend(@Query("username") String username);
 }
