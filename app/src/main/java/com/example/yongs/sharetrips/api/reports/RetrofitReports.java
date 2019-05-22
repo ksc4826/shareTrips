@@ -7,6 +7,8 @@ import com.example.yongs.sharetrips.api.ApiCallback;
 import com.example.yongs.sharetrips.common.Common;
 import com.example.yongs.sharetrips.model.Report;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -164,7 +166,26 @@ public class RetrofitReports {
 
             @Override
             public void onFailure(Call<List<Report>> call, Throwable t) {
+                callback.onError(t);
+            }
+        });
+    }
 
+    public void getRecommend(String username, final ApiCallback callback){
+        mReportApiService.getRecommend(username).enqueue(new Callback<JSONObject>(){
+
+            @Override
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+                if(response.isSuccessful()){
+                    callback.onSuccess(response.code(), response.body());
+                }else{
+                    callback.onFailure(response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JSONObject> call, Throwable t) {
+                callback.onError(t);
             }
         });
     }

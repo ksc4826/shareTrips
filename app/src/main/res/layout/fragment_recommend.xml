@@ -1,16 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true">
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_marginTop="?attr/actionBarSize"
+    android:layout_marginBottom="50dp"
+    android:orientation="vertical">
 
-    <android.support.constraint.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
+
+        <ExpandableListView
+            android:id="@+id/recommend_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:groupIndicator="@null">
+        </ExpandableListView>
 
 
+    </FrameLayout>
 
-    </android.support.constraint.ConstraintLayout>
+</RelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>
