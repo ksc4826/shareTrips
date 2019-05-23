@@ -152,6 +152,7 @@ public class HomeFragment extends Fragment {
                             ReportApiService reportApiService = mRetrofitReports.create(ReportApiService.class);
                             Call<ResponseBody> call = reportApiService.getImage(report.getId());
                             new HomeFragment.ImageCall(report).execute(call);
+                            mReportAdapter.reportArrayList.add(report);
                         }
                         list.setAdapter(mReportAdapter);
                         mReportAdapter.notifyDataSetChanged();

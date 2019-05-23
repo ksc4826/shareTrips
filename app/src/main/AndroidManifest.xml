@@ -17,6 +17,8 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+                <action android:name="android.appwidet.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -25,7 +27,8 @@
         <activity android:name=".activity.JoinActivity" />
         <activity android:name=".activity.ReportActivity" />
         <activity android:name=".activity.ModifyActivity" />
-        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.CountryActivity" />
+        <activity android:name=".activity.ThemeActivity" />
     </application>
 
 </manifest>

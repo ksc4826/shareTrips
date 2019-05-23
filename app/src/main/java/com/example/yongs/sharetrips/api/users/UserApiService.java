@@ -1,8 +1,10 @@
 package com.example.yongs.sharetrips.api.users;
 
+import com.example.yongs.sharetrips.model.Report;
 import com.example.yongs.sharetrips.model.User;
 
 import java.util.HashMap;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -16,6 +18,7 @@ import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface UserApiService {
 
@@ -38,5 +41,19 @@ public interface UserApiService {
 
     @DELETE("/users/{id}")
     Call<Void> deleteUser(@Path("id") String id);
+
+
+
+    @POST("/users/{id}/theme")
+    Call<Void> PostTheme(@Path("id") String id, @Body String theme);
+
+    @POST("/users/{id}/country")
+    Call<Void> PostCountry(@Path("id") String id, @Body String country);
+
+    @DELETE("/users/{id}/theme")
+    Call<Void> deleteTheme(@Path("id") String id);
+
+    @DELETE("/users/{id}/country")
+    Call<Void> deleteCountry(@Path("id") String id);
 
 }

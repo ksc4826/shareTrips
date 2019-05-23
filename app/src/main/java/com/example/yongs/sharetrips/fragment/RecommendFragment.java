@@ -195,6 +195,7 @@ public class RecommendFragment extends Fragment {
         }
     }
 
+
     private class ImageCall extends AsyncTask<Call,Void,ResponseBody> {
         Report report;
 
