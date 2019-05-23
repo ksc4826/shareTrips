@@ -45,6 +45,6 @@ public interface ReportApiService {
     @GET("/reports/search")
     Call<List<Report>> getSearch(@Query("keyword") String keyword);
 
-    @GET("/reports/recommend")
-    Call<JSONObject> getRecommend(@Query("username") String username);
+    @GET("/reports/recommend/{username}")
+    Call<JSONObject> getRecommend(@Path("username") String username);
 }

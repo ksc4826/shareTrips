@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yongs.sharetrips.R;
 import com.example.yongs.sharetrips.adapter.ReportAdapter;
@@ -143,6 +144,7 @@ public class HomeFragment extends Fragment {
 
                         mReportAdapter.reportArrayList.clear();
                         mReportList = (List<Report>) receiveData;
+                        Log.d(TAG, String.valueOf(mReportList.size()));
                         for (int i = 0; i < mReportList.size(); i++) {
                             Report report = mReportList.get(i);
                             Log.d(TAG,String.valueOf(report.getId()));
@@ -150,7 +152,6 @@ public class HomeFragment extends Fragment {
                             ReportApiService reportApiService = mRetrofitReports.create(ReportApiService.class);
                             Call<ResponseBody> call = reportApiService.getImage(report.getId());
                             new HomeFragment.ImageCall(report).execute(call);
-                            mReportAdapter.reportArrayList.add(report);
                         }
                         list.setAdapter(mReportAdapter);
                         mReportAdapter.notifyDataSetChanged();
@@ -159,6 +160,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onFailure(int code) {
                         Log.i(TAG,String.valueOf(code));
+                        Toast.makeText(getActivity().getApplicationContext(),"검색 결과가 없습니다.", Toast.LENGTH_LONG).show();
                         //mReportAdapter.reportArrayList.clear();
                         //mReportAdapter.notifyDataSetChanged();
                     }

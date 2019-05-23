@@ -144,6 +144,7 @@ public class RecommendFragment extends Fragment {
             }
         }
 
+
         try {
             jsonObject.put("aaa", array1);
             jsonObject.put("bbb", array2);
@@ -152,7 +153,7 @@ public class RecommendFragment extends Fragment {
         }
 
         String str = jsonObject.toString();
-        System.out.println(str);
+        Log.d(TAG, str);
         return jsonObject;
     }
 
