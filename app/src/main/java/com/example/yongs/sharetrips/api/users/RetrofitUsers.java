@@ -204,8 +204,10 @@ public class RetrofitUsers {
     }
 
 
-    public void deleteTheme(String id, final ApiCallback callback) {
-        mUserApiService.deleteTheme(id).enqueue(new Callback<Void>() {
+
+    public void deleteTheme(String id, String temp, final ApiCallback callback) {
+        mUserApiService.deleteTheme(id, temp).enqueue(new Callback<Void>() {
+
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -223,8 +225,10 @@ public class RetrofitUsers {
         });
     }
 
-    public void deleteCountry(String id, final ApiCallback callback) {
-        mUserApiService.deleteCountry(id).enqueue(new Callback<Void>() {
+
+    public void deleteCountry(String id, String temp, final ApiCallback callback) {
+        mUserApiService.deleteCountry(id, temp).enqueue(new Callback<Void>() {
+
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

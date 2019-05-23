@@ -46,9 +46,11 @@ public class ProfileFragment extends Fragment {
 
 
     @BindView(R.id.location_plus)
-    ImageView location_pius;
+
+    ImageView location_plus;
     @BindView(R.id.theme_plus)
-    ImageView theme_pius;
+    ImageView theme_plus;
+
 
     ArrayList<String> countryList = new ArrayList<String>();
     ArrayList<String> themeList = new ArrayList<String>();
@@ -57,6 +59,7 @@ public class ProfileFragment extends Fragment {
 
     RetrofitUsers mRetrofitUsers;
 
+    String temp;
     User mUser;
 
     private String mId;
@@ -122,7 +125,9 @@ public class ProfileFragment extends Fragment {
                 mUser = (User) receiveData;
                 username.setText(mUser.getUsername());
                 email.setText(mUser.getEmail());
-                countryList.add(mUser.getTheme());
+
+                themeList.add(mUser.getTheme());
+
                 countryList.add(mUser.getCounrty());
 
             }
@@ -137,7 +142,10 @@ public class ProfileFragment extends Fragment {
     private void deleteTheme() {
         mId = getActivity().getIntent().getStringExtra("id");
 
-        mRetrofitUsers.deleteTheme(mId, new ApiCallback() {
+
+
+        mRetrofitUsers.deleteTheme(mId, temp, new ApiCallback() {
+
             @Override
             public void onError(Throwable t) {
                 Log.e(TAG, t.toString());
@@ -148,7 +156,6 @@ public class ProfileFragment extends Fragment {
 
                 themeList.clear();
                 themeAdapter.notifyDataSetChanged();
-
 
             }
 
@@ -162,7 +169,7 @@ public class ProfileFragment extends Fragment {
     private void deleteCountry() {
         mId = getActivity().getIntent().getStringExtra("id");
 
-        mRetrofitUsers.deleteCountry(mId, new ApiCallback() {
+        mRetrofitUsers.deleteCountry(mId, temp, new ApiCallback() {
             @Override
             public void onError(Throwable t) {
                 Log.e(TAG, t.toString());
@@ -206,11 +213,12 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        location_pius.setOnClickListener(new TextView.OnClickListener() {
+        location_plus.setOnClickListener(new TextView.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (themeList.get(0) != null) {
+                if (countryList.get(0) != null) {
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                     builder.setMessage("관심지역이 설정되어있습니다.");
@@ -229,10 +237,10 @@ public class ProfileFragment extends Fragment {
 
         });
 
-        theme_pius.setOnClickListener(new TextView.OnClickListener() {
+        theme_plus.setOnClickListener(new TextView.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (countryList.get(0) != null) {
+                if (themeList.get(0) != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                     builder.setMessage("관심테마가 설정되어있습니다.");

@@ -50,10 +50,12 @@ public interface UserApiService {
     @POST("/users/{id}/country")
     Call<Void> PostCountry(@Path("id") String id, @Body String country);
 
-    @DELETE("/users/{id}/theme")
-    Call<Void> deleteTheme(@Path("id") String id);
 
-    @DELETE("/users/{id}/country")
-    Call<Void> deleteCountry(@Path("id") String id);
+    @PATCH("/users/{id}/theme")
+    Call<Void> deleteTheme(@Path("id") String id, @Body String temp);
+
+    @PATCH("/users/{id}/country")
+    Call<Void> deleteCountry(@Path("id") String id, @Body String temp);
+
 
 }
