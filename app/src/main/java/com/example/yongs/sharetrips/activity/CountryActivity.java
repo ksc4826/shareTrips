@@ -1,9 +1,11 @@
 package com.example.yongs.sharetrips.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +21,7 @@ import com.example.yongs.sharetrips.R;
 import com.example.yongs.sharetrips.adapter.CountryListAdapter;
 import com.example.yongs.sharetrips.api.ApiCallback;
 import com.example.yongs.sharetrips.api.users.RetrofitUsers;
+import com.example.yongs.sharetrips.model.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -35,16 +38,14 @@ public class CountryActivity extends AppCompatActivity {
     private static ExpandableListView countryListView;
     private static CountryListAdapter adapter;
 
-    EditText search;
-
     String mId;
     RetrofitUsers mRetrofitUsers;
 
-    String[] continent = new String[]{
+    private static final String[] continent = new String[]{
             "동남아시아", "동북아시아", "중앙아시아", "남아시아", "동유럽", "북유럽", "서유럽", "남유럽",
             "중동", "아프리카", "북,중미", "남미", "태평양", "국내", "기타"
     };
-    String[][] country = {
+    private static final String[][] country = {
             //대륙 구분
 
             /*동남아*/    {"태국", "베트남", "미얀마", "말레이시아", "싱가포르", "인도네시아", "라오스", "동티모르", "브루나이","캄보디아","필리핀"},
@@ -65,6 +66,8 @@ public class CountryActivity extends AppCompatActivity {
             /*기타*/      {"북한"}
     };
 
+    private static final String TAG = CountryActivity.class.getSimpleName();
+
     private void setToolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("관심지역");
@@ -78,21 +81,27 @@ public class CountryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country);
 
+        ButterKnife.bind(this);
+
+        mRetrofitUsers = RetrofitUsers.getInstance(this).createBaseApi();
 
         countryListView = findViewById(R.id.country_listview);
         countryListView.setGroupIndicator(null);
 
-        search = (EditText) findViewById(R.id.inputSearch);
-
-        ButterKnife.bind(this);
         setToolbar();
+
         setItems();
         setListener();
-        setSearch();
-
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home)
+            finish();
+        return super.onOptionsItemSelected(item);
+    }
 
     void setItems() {
         ArrayList<String> header = new ArrayList<String>();
@@ -125,63 +134,30 @@ public class CountryActivity extends AppCompatActivity {
 
                 mId = getIntent().getStringExtra("id");
 
+                User user = new User();
+                user.setCountry(adapter.getChild(groupPos, childPos).toString());
 
-
-                mRetrofitUsers.PostCountry(mId,adapter.getChild(groupPos, childPos).toString(), new ApiCallback() {
+                mRetrofitUsers.patchCountry(mId,user, new ApiCallback() {
                     @Override
                     public void onError(Throwable t) {
-
+                        Log.e(TAG,t.toString());
                     }
 
                     @Override
                     public void onSuccess(int code, Object receiveData) {
+                        Log.i(TAG,String.valueOf(code));
                         finish();
                     }
 
                     @Override
                     public void onFailure(int code) {
-
+                        Log.i(TAG,String.valueOf(code));
                     }
                 });
-              /*  */
-
-      //          finish();
                 return false;
             }
 
         });
-
-
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home)
-            finish();
-        return super.onOptionsItemSelected(item);
-    }
-
-    void setSearch() {
-        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adapter.getFilter().filter(s.toString());
-
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
-
 
 }

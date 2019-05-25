@@ -11,19 +11,25 @@ public class User implements Parcelable {
     private String password;
     private String username;
     private String email;
+    private String theme;
+    private String country;
 
     public User(){
         this.id = null;
         this.password = null;
         this.username = null;
         this.email = null;
+        this.theme = null;
+        this.country = null;
     }
 
-    public User(String id, String password, String username, String email){
+    public User(String id, String password, String username, String email, String theme, String country){
         this.id = id;
         this.password = password;
         this.username = username;
         this.email = email;
+        this.theme = theme;
+        this.country = country;
     }
 
     public User(HashMap<String, Object> parameters){
@@ -31,6 +37,8 @@ public class User implements Parcelable {
         this.password = (String) parameters.get("password");
         this.username = (String) parameters.get("username");
         this.email = (String) parameters.get("email");
+        this.theme = (String) parameters.get("theme");
+        this.country = (String) parameters.get("country");
     }
 
     protected User(Parcel in) {
@@ -38,6 +46,8 @@ public class User implements Parcelable {
         password = in.readString();
         username = in.readString();
         email = in.readString();
+        theme = in.readString();
+        country = in.readString();
     }
 
     public String getId() {
@@ -72,6 +82,20 @@ public class User implements Parcelable {
         this.email = email;
     }
 
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) { this.theme = theme; }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public boolean checkInput(){
         if(getId()==null
                 ||getPassword()==null
@@ -93,6 +117,8 @@ public class User implements Parcelable {
         dest.writeString(password);
         dest.writeString(username);
         dest.writeString(email);
+        dest.writeString(theme);
+        dest.writeString(country);
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
