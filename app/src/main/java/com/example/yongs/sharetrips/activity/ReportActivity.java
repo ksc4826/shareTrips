@@ -1,13 +1,17 @@
 package com.example.yongs.sharetrips.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.renderscript.ScriptGroup;
 import android.support.annotation.Nullable;
-import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -25,13 +29,19 @@ import com.example.yongs.sharetrips.R;
 import com.example.yongs.sharetrips.api.ApiCallback;
 import com.example.yongs.sharetrips.api.reports.RetrofitReports;
 import com.example.yongs.sharetrips.model.Report;
+import com.example.yongs.sharetrips.utils.ImageAnalysis;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ReportActivity extends AppCompatActivity implements View.OnClickListener {
+import static android.os.Process.THREAD_PRIORITY_BACKGROUND;
+
+public class ReportActivity extends AppCompatActivity implements View.OnClickListener{
 
     @BindView(R.id.toolbar)
     android.support.v7.widget.Toolbar toolbar;
@@ -51,14 +61,78 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
 
     RetrofitReports mRetrofitReports;
 
+    public static ImageAnalysisThread mThread;
+
     String mTitle;
-    String mLocation;
+    public static String mLocation;
     String mContent;
 
     Uri mUri;
     String mImagePath;
 
     Report mReport = new Report();
+    Context mContext;
+    private ImageAnalysis mImageAnalysis = new ImageAnalysis();
+
+    private Handler mUiHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            if(msg.what == 0){
+                String name = mLocation.split(",")[0];
+                double d1 = Double.parseDouble(mLocation.split(",")[1]);
+                double d2 = Double.parseDouble(mLocation.split(",")[2]);
+                Geocoder geocoder = new Geocoder(mContext);
+                List<Address> locationPath = null;
+                try {
+                    locationPath = geocoder.getFromLocation(d1,d2,1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(locationPath!=null){
+                    Log.d(TAG,locationPath.get(0).getAddressLine(0));
+                    location.setSingleLine(false);
+                    location.setText(name+" - "+locationPath.get(0).getAddressLine(0));
+                }else{
+                    location.setText(name);
+                }
+            }
+        }
+    };
+
+    public class  ImageAnalysisThread extends HandlerThread {
+        private static final int IMAGE_ANALYSIS = 0;
+        public  Handler mHandler;
+
+        public ImageAnalysisThread() {
+            super("ImageAnalysisThread");
+        }
+
+        @Override
+        protected void onLooperPrepared() {
+            super.onLooperPrepared();
+            mHandler = new Handler(getLooper()){
+                @Override
+                public void handleMessage(Message msg){
+                    switch(msg.what){
+                        case IMAGE_ANALYSIS:
+                            mUiHandler.sendMessage(mUiHandler.obtainMessage(0,mLocation));
+                    }
+                }
+            };
+        }
+
+        public void imageAnalysis(String filePath){
+            File file = new File(filePath);
+            try {
+                mImageAnalysis.callCloudVision(MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file)),getApplicationContext());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +141,11 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
         ButterKnife.bind(this);
 
         mRetrofitReports = RetrofitReports.getInstance(this).createBaseApi();
+
+        mContext = getApplicationContext();;
+
+        mThread = new ImageAnalysisThread();
+        mThread.start();
 
         setToolbar();
 
@@ -172,6 +251,7 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
                     Log.d(TAG,"Image Path:"+mImagePath);
                     image.setImageURI(mUri);
                     button.setVisibility(View.GONE);
+                    mThread.imageAnalysis(mImagePath);
                 }
             }
         }
@@ -205,5 +285,11 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
             mContent = content.getText().toString();
             mReport.setContent(mContent);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mThread.quit();
     }
 }
