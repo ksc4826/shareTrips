@@ -71,6 +71,7 @@
         android:layout_height="wrap_content"
         android:text="사진 장소"
         android:textSize="10dp"
+        android:singleLine="false"
         android:paddingLeft="50dp"
         android:paddingTop="15dp"
         app:layout_constraintTop_toBottomOf="@+id/image"/>

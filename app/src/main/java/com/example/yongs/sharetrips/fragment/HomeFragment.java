@@ -219,6 +219,7 @@ public class HomeFragment extends Fragment {
                 mReportAdapter.reportArrayList.add(r);
                 list.setAdapter(mReportAdapter);
                 mReportAdapter.notifyDataSetChanged();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
