@@ -34,6 +34,11 @@ public interface ReportApiService {
     @GET("/reports/images/{reportID}")
     Call<ResponseBody> getImage(@Path("reportID") int reportID);
 
+    @GET("/reports/search")
+    Call<List<Report>> getSearch(@Query("keyword") String keyword);
+
+    @GET("/reports/recommend/{username}")
+    Call<List<Report>> getRecommend(@Path("username") String username);
 
     @Multipart
     @POST("/reports")
@@ -41,10 +46,4 @@ public interface ReportApiService {
             @PartMap() Map<String,Object> report,
             @Part MultipartBody.Part file
     );
-
-    @GET("/reports/search")
-    Call<List<Report>> getSearch(@Query("keyword") String keyword);
-
-    @GET("/reports/recommend/{username}")
-    Call<JSONObject> getRecommend(@Path("username") String username);
 }

@@ -172,10 +172,10 @@ public class RetrofitReports {
     }
 
     public void getRecommend(String username, final ApiCallback callback){
-        mReportApiService.getRecommend(username).enqueue(new Callback<JSONObject>(){
+        mReportApiService.getRecommend(username).enqueue(new Callback<List<Report>>(){
 
             @Override
-            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
+            public void onResponse(Call<List<Report>> call, Response<List<Report>> response) {
                 if(response.isSuccessful()){
                     callback.onSuccess(response.code(), response.body());
                 }else{
@@ -184,7 +184,7 @@ public class RetrofitReports {
             }
 
             @Override
-            public void onFailure(Call<JSONObject> call, Throwable t) {
+            public void onFailure(Call<List<Report>> call, Throwable t) {
                 callback.onError(t);
             }
         });

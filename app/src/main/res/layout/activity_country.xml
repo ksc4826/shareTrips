@@ -21,19 +21,11 @@
         android:focusableInTouchMode="true"
         >
 
-
-        <EditText android:id="@+id/inputSearch"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="Search.."
-            android:inputType="textVisiblePassword"/>
-
-
         <ExpandableListView
             android:id="@+id/country_listview"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="10dp"
             android:divider="#56414141"
             android:dividerHeight="1dp">
 

@@ -165,8 +165,8 @@ public class RetrofitUsers {
     }
 
 
-    public void PostTheme(String id, String theme, final ApiCallback callback) {
-        mUserApiService.PostTheme(id, theme).enqueue(new Callback<Void>() {
+    public void patchTheme(String id, User user, final ApiCallback callback) {
+        mUserApiService.patchTheme(id, user).enqueue(new Callback<Void>() {
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -184,8 +184,8 @@ public class RetrofitUsers {
         });
     }
 
-    public void PostCountry(String id, String country, final ApiCallback callback) {
-        mUserApiService.PostCountry(id, country).enqueue(new Callback<Void>() {
+    public void patchCountry(String id, User user, final ApiCallback callback) {
+        mUserApiService.patchCountry(id, user).enqueue(new Callback<Void>() {
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
@@ -202,45 +202,4 @@ public class RetrofitUsers {
             }
         });
     }
-
-
-    public void deleteTheme(String id, final ApiCallback callback) {
-        mUserApiService.deleteTheme(id).enqueue(new Callback<Void>() {
-
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(response.code(), response.body());
-                } else {
-                    callback.onFailure(response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                callback.onError(t);
-            }
-        });
-    }
-
-    public void deleteCountry(String id, final ApiCallback callback) {
-        mUserApiService.deleteCountry(id).enqueue(new Callback<Void>() {
-
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    callback.onSuccess(response.code(), response.body());
-                } else {
-                    callback.onFailure(response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                callback.onError(t);
-            }
-        });
-    }
-
-
 }

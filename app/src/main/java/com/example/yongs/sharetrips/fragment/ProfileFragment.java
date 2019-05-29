@@ -46,9 +46,13 @@ public class ProfileFragment extends Fragment {
 
 
     @BindView(R.id.location_plus)
-    ImageView location_pius;
+    ImageView location_plus;
     @BindView(R.id.theme_plus)
-    ImageView theme_pius;
+    ImageView theme_plus;
+    @BindView(R.id.location_content)
+    TextView location_content;
+    @BindView(R.id.theme_content)
+    TextView theme_content;
 
     ArrayList<String> countryList = new ArrayList<String>();
     ArrayList<String> themeList = new ArrayList<String>();
@@ -81,20 +85,10 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
 
-        ListView countryListView = (ListView) view.findViewById(R.id.country_list);
-        ListView themeListView = (ListView) view.findViewById(R.id.theme_list);
-        countryAdapter = new ArrayAdapter<String>(inflater.getContext(), android.R.layout.simple_list_item_1, countryList);
-        themeAdapter = new ArrayAdapter<String>(inflater.getContext(), android.R.layout.simple_list_item_1, themeList);
-        countryListView.setAdapter(countryAdapter);
-        themeListView.setAdapter(themeAdapter);
-
-
         mRetrofitUsers = RetrofitUsers.getInstance(getActivity().getBaseContext()).createBaseApi();
 
-        themeListView.setOnItemClickListener(themeListener);
-        countryListView.setOnItemClickListener(countryListener);
-
         setProfile();
+
         setClickEvent();
 
         return view;
@@ -122,58 +116,8 @@ public class ProfileFragment extends Fragment {
                 mUser = (User) receiveData;
                 username.setText(mUser.getUsername());
                 email.setText(mUser.getEmail());
-                countryList.add(mUser.getTheme());
-                countryList.add(mUser.getCounrty());
-
-            }
-
-            @Override
-            public void onFailure(int code) {
-                Log.i(TAG, String.valueOf(code));
-            }
-        });
-    }
-
-    private void deleteTheme() {
-        mId = getActivity().getIntent().getStringExtra("id");
-
-        mRetrofitUsers.deleteTheme(mId, new ApiCallback() {
-            @Override
-            public void onError(Throwable t) {
-                Log.e(TAG, t.toString());
-            }
-
-            @Override
-            public void onSuccess(int code, Object receiveData) {
-
-                themeList.clear();
-                themeAdapter.notifyDataSetChanged();
-
-
-            }
-
-            @Override
-            public void onFailure(int code) {
-                Log.i(TAG, String.valueOf(code));
-            }
-        });
-    }
-
-    private void deleteCountry() {
-        mId = getActivity().getIntent().getStringExtra("id");
-
-        mRetrofitUsers.deleteCountry(mId, new ApiCallback() {
-            @Override
-            public void onError(Throwable t) {
-                Log.e(TAG, t.toString());
-            }
-
-            @Override
-            public void onSuccess(int code, Object receiveData) {
-
-                countryList.clear();
-                countryAdapter.notifyDataSetChanged();
-
+                location_content.setText(mUser.getCountry());
+                theme_content.setText(mUser.getTheme());
             }
 
             @Override
@@ -206,99 +150,41 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        location_pius.setOnClickListener(new TextView.OnClickListener() {
+        location_plus.setOnClickListener(new TextView.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (themeList.get(0) != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                    builder.setMessage("관심지역이 설정되어있습니다.");
-
-                    builder.setNegativeButton("확인",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
-                    builder.show();
-                } else {
-                    Intent intent = new Intent(getActivity(), CountryActivity.class);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(getActivity(), CountryActivity.class);
+                intent.putExtra("id", mId);
+                startActivity(intent);
             }
 
         });
 
-        theme_pius.setOnClickListener(new TextView.OnClickListener() {
+        theme_plus.setOnClickListener(new TextView.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (countryList.get(0) != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                    builder.setMessage("관심테마가 설정되어있습니다.");
-
-                    builder.setNegativeButton("확인",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
-                    builder.show();
-                } else {
-                    Intent intent = new Intent(getActivity(), ThemeActivity.class);
-                    startActivity(intent);
-                }
+                Intent intent = new Intent(getActivity(), ThemeActivity.class);
+                intent.putExtra("id", mId);
+                startActivity(intent);
             }
         });
 
+        location_content.setOnClickListener(new TextView.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CountryActivity.class);
+                intent.putExtra("id", mId);
+                startActivity(intent);
+            }
+        });
 
+        theme_content.setOnClickListener(new TextView.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ThemeActivity.class);
+                intent.putExtra("id", mId);
+                startActivity(intent);
+            }
+        });
     }
-
-    AdapterView.OnItemClickListener themeListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View v, final int position, long id) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(themeList.get(position));
-            builder.setMessage("관심테마에서 삭제");
-            builder.setPositiveButton("삭제",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            deleteTheme();
-                        }
-                    });
-            builder.setNegativeButton("취소",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
-            builder.show();
-        }
-    };
-
-
-    AdapterView.OnItemClickListener countryListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View v, final int position, long id) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setTitle(countryList.get(position));
-            builder.setMessage("관심지역에서 삭제");
-            builder.setPositiveButton("삭제",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            deleteCountry();
-
-                        }
-                    });
-            builder.setNegativeButton("취소",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-//                            Toast.makeText(getActivity(),"취소",Toast.LENGTH_LONG).show();
-                        }
-                    });
-            builder.show();
-        }
-    };
-
-
 }

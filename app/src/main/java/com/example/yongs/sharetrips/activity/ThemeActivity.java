@@ -1,11 +1,13 @@
 package com.example.yongs.sharetrips.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
 
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +21,7 @@ import com.example.yongs.sharetrips.api.ApiCallback;
 import com.example.yongs.sharetrips.api.reports.RetrofitReports;
 import com.example.yongs.sharetrips.api.users.RetrofitUsers;
 import com.example.yongs.sharetrips.fragment.ProfileFragment;
+import com.example.yongs.sharetrips.model.User;
 
 import java.util.ArrayList;
 
@@ -33,12 +36,16 @@ public class ThemeActivity extends AppCompatActivity {
 
     RetrofitUsers mRetrofitUsers;
 
+    ListView mThemeListView;
+    ArrayList<String> mThemeList;
+    ArrayAdapter<String > mThemeAdapter;
+    AdapterView.OnItemClickListener mListener;
 
+    private static final String TAG = ThemeActivity.class.getSimpleName();
 
-    ListView themeListView;
-    ArrayList<String> themeList;
-    ArrayAdapter<String > adapter;
-
+    private static final String[] THEME = new String[]{
+            "음식", "쇼핑", "관광지", "자연", "랜드마크", "문화/예술"
+    };
 
     private void setToolbar(){
         setSupportActionBar(toolbar);
@@ -53,58 +60,59 @@ public class ThemeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_theme);
 
-
-        themeListView = findViewById(R.id.list);
         ButterKnife.bind(this);
+
+        mRetrofitUsers = RetrofitUsers.getInstance(this).createBaseApi();
+
+        mThemeListView = findViewById(R.id.list);
+
         setToolbar();
 
-        themeList = new ArrayList<>();
-        themeList.add("음식");
-        themeList.add("쇼핑");
-        themeList.add("관광지");
-        themeList.add("자연");
-        themeList.add("랜드마크");
-        themeList.add("문화/예술");
+        setClickListener();
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,themeList);
-        themeListView.setAdapter(adapter);
+        setThemeList();
 
-        themeListView.setOnItemClickListener(listener);
     }
 
-
-
-    AdapterView.OnItemClickListener listener= new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Toast.makeText(ThemeActivity.this, themeList.get(position), Toast.LENGTH_SHORT).show();
-
-            mId = getIntent().getStringExtra("id");
-
-
-
-            mRetrofitUsers.PostTheme(mId,themeList.get(position), new ApiCallback() {
-                @Override
-                public void onError(Throwable t) {
-
-                }
-
-                @Override
-                public void onSuccess(int code, Object receiveData) {
-
-                    finish();
-                }
-
-                @Override
-                public void onFailure(int code) {
-
-                }
-            });
-/**/
-            //finish();
-
+    private void setThemeList(){
+        mThemeList = new ArrayList<String>();
+        for(int i=0;i<THEME.length;i++){
+            mThemeList.add(THEME[i]);
         }
-    };
+        mThemeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,mThemeList);
+        mThemeListView.setAdapter(mThemeAdapter);
+
+        mThemeListView.setOnItemClickListener(mListener);
+    }
+
+    private void setClickListener(){
+        mListener= new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, View view, int position, long id) {
+                mId = getIntent().getStringExtra("id");
+
+                User user = new User();
+                user.setTheme(mThemeList.get(position));
+                mRetrofitUsers.patchTheme(mId,user, new ApiCallback() {
+                    @Override
+                    public void onError(Throwable t) {
+                        Log.e(TAG,t.toString());
+                    }
+
+                    @Override
+                    public void onSuccess(int code, Object receiveData) {
+                        Log.i(TAG,String.valueOf(code));
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(int code) {
+                        Log.i(TAG,String.valueOf(code));
+                    }
+                });
+            }
+        };
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

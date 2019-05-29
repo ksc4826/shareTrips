@@ -46,7 +46,6 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.list)
     ListView list;
 
-    SearchView searchView;
     ReportAdapter mReportAdapter;
     ArrayList<Report> mReportArrayList;
     RetrofitReports mRetrofitReports;
@@ -123,7 +122,7 @@ public class HomeFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_search,menu);
-        searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
+        SearchView searchView = (SearchView)menu.findItem(R.id.menu_search).getActionView();
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setQueryHint("검색어를 입력하세요.");
         searchView.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -131,18 +130,16 @@ public class HomeFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                Log.d(TAG, s);
                 mRetrofitReports.getSearch(s, new ApiCallback() {
                     @Override
                     public void onError(Throwable t) {
-                        Log.e(TAG,t.toString());
+
                     }
 
                     @Override
                     public void onSuccess(int code, Object receiveData) {
                         Log.i(TAG, String.valueOf(code));
 
-                        mReportAdapter.reportArrayList.clear();
                         mReportList = (List<Report>) receiveData;
                         Log.d(TAG, String.valueOf(mReportList.size()));
                         for (int i = 0; i < mReportList.size(); i++) {
@@ -152,18 +149,12 @@ public class HomeFragment extends Fragment {
                             ReportApiService reportApiService = mRetrofitReports.create(ReportApiService.class);
                             Call<ResponseBody> call = reportApiService.getImage(report.getId());
                             new HomeFragment.ImageCall(report).execute(call);
-                            mReportAdapter.reportArrayList.add(report);
                         }
-                        list.setAdapter(mReportAdapter);
-                        mReportAdapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onFailure(int code) {
-                        Log.i(TAG,String.valueOf(code));
-                        Toast.makeText(getActivity().getApplicationContext(),"검색 결과가 없습니다.", Toast.LENGTH_LONG).show();
-                        //mReportAdapter.reportArrayList.clear();
-                        //mReportAdapter.notifyDataSetChanged();
+
                     }
                 });
                 return false;
@@ -230,6 +221,7 @@ public class HomeFragment extends Fragment {
                 mReportAdapter.reportArrayList.add(r);
                 list.setAdapter(mReportAdapter);
                 mReportAdapter.notifyDataSetChanged();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
