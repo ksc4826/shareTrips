@@ -41,6 +41,17 @@ import retrofit2.Call;
  */
 public class RecommendFragment extends Fragment {
 
+    @BindView(R.id.recommend_list)
+    ExpandableListView expandableListView;
+
+    RecommendAdapter mRecommendAdapter;
+    ArrayList<String> parentList;
+    HashMap<String, ArrayList<Report>> childHashMap;
+    RetrofitReports mRetrofitReports;
+    ReportApiService reportApiService;
+
+    private static final String TAG = RecommendFragment.class.getSimpleName();
+
     public RecommendFragment() {
         // Required empty public constructor
     }
@@ -55,8 +66,55 @@ public class RecommendFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view  = inflater.inflate(R.layout.fragment_home, container, false);
+        View view  = inflater.inflate(R.layout.fragment_recommend, container, false);
+        ButterKnife.bind(this,view);
 
+        parentList = new ArrayList<>();
+        childHashMap = new HashMap<>();
+
+        JSONObject jsonObject = sampleJSON();
+        setRecommendList(jsonObject);
+        //Log.d(TAG, getActivity().getIntent().getStringExtra("username"));
+        /*mRetrofitReports.getRecommend(getActivity().getIntent().getStringExtra("username"), new ApiCallback() {
+            @Override
+            public void onError(Throwable t) {
+                Log.e(TAG,t.toString());
+            }
+
+            @Override
+            public void onSuccess(int code, Object receiveData) {
+                Log.i(TAG, String.valueOf(code));
+                setRecommendList((JSONObject)receiveData);
+            }
+
+            @Override
+            public void onFailure(int code) {
+                Log.i(TAG,String.valueOf(code));
+            }
+        });*/
+
+        mRecommendAdapter = new RecommendAdapter(getActivity(), parentList, childHashMap);
+        expandableListView.setAdapter(mRecommendAdapter);
+
+        expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+            @Override
+            public void onGroupExpand(int groupPosition) {
+
+            }
+        });
+        expandableListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
+            @Override
+            public void onGroupCollapse(int groupPosition) {
+
+            }
+        });
+        expandableListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                return false;
+            }
+        });
+        //expandableListView.expandGroup(0);
         return view;
     }
 
@@ -95,6 +153,7 @@ public class RecommendFragment extends Fragment {
 
         String str = jsonObject.toString();
         Log.d(TAG, str);
+
         return jsonObject;
     }
 
