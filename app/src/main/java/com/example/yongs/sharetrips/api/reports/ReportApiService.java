@@ -37,7 +37,7 @@ public interface ReportApiService {
     @GET("/reports/search")
     Call<List<Report>> getSearch(@Query("keyword") String keyword);
 
-    @GET("/reports/recommend/{username}")
+    @GET("/reports/recommendation/{username}")
     Call<List<Report>> getRecommend(@Path("username") String username);
 
     @Multipart
