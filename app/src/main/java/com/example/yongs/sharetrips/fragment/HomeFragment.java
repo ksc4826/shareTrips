@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.yongs.sharetrips.R;
 import com.example.yongs.sharetrips.adapter.ReportAdapter;
@@ -140,6 +141,7 @@ public class HomeFragment extends Fragment {
                         Log.i(TAG, String.valueOf(code));
 
                         mReportList = (List<Report>) receiveData;
+                        Log.d(TAG, String.valueOf(mReportList.size()));
                         for (int i = 0; i < mReportList.size(); i++) {
                             Report report = mReportList.get(i);
                             Log.d(TAG,String.valueOf(report.getId()));

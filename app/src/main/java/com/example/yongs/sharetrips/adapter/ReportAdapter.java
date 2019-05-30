@@ -63,6 +63,11 @@ public class ReportAdapter extends BaseAdapter {
         holder.username.setText(String.valueOf(reportArrayList.get(position).getUsername()));
         holder.date.setText(String.valueOf(reportArrayList.get(position).getDate()));
         holder.image.setImageBitmap(reportArrayList.get(position).getBitmap());
+        String str = reportArrayList.get(position).getContent();
+        str = str.replace("\\r\\n", "\r\n");
+        str = str.replace("\\n", "\n");
+        str = str.replace("\\r", "\r");
+        reportArrayList.get(position).setContent(str);
         holder.content.setText(String.valueOf(reportArrayList.get(position).getContent()));
         holder.location.setText(String.valueOf(reportArrayList.get(position).getLocation()));
         holder.date.setText(String.valueOf(reportArrayList.get(position).getDate()));

@@ -5,12 +5,26 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical">
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <ExpandableListView
+                android:id="@+id/recommend_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:groupIndicator="@null"
+                android:layout_margin="10dp" >
+            </ExpandableListView>
 
-    </android.support.constraint.ConstraintLayout>
+        </FrameLayout>
+
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>
